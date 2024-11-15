@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tracking Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        // Search Panel
+        function search() {
+            const searchQuery = document.getElementById('searchQuery').value;
+            fetch('/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `search_query=${searchQuery}`
+            }).then(() => {
+                document.getElementById('searchMessage').innerText = "Thank You for Searching!";
+            });
+        }
+
+        // Video Play
+        function playVideo(videoId) {
+            fetch('/watch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `video_id=${videoId}`
+            }).then(() => {
+                document.getElementById('videoMessage').innerText = "Thank You for Watching!";
+            });
+            document.getElementById(videoId).play();
+        }
+
+        // Like Content
+        function likeContent(contentId) {
+            fetch('/like', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `content_id=${contentId}`
+            }).then(() => {
+                document.getElementById('likeMessage').innerText = "Thank You for Liking!";
+            });
+        }
+
+        // Comment Content
+        function commentContent(contentId) {
+            const commentText = prompt("Write your comment:");
+            fetch('/comment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `content_id=${contentId}&comment_text=${commentText}`
+            }).then(() => {
+                document.getElementById('commentMessage').innerText = "Thank You for Commenting!";
+            });
+        }
+
+        // Subscribe Channel
+        function subscribeChannel(channelId) {
+            fetch('/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `channel_id=${channelId}`
+            }).then(() => {
+                document.getElementById('subscribeMessage').innerText = "Thank You for Subscribing!";
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Search Panel -->
+        <div class="panel">
+            <h1>Search Panel</h1>
+            <input type="text" id="searchQuery" placeholder="Search...">
+            <button onclick="search()">Search</button>
+            <p id="searchMessage"></p>
+        </div>
+
+        <!-- Video Panel -->
+        <div class="panel">
+            <h1>Video Panel</h1>
+            <video width="640" height="360" controls id="video1">
+                <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <button onclick="playVideo('video1')">Play Video</button>
+            <p id="videoMessage"></p>
+        </div>
+
+        <!-- Like & Comment Panel -->
+        <div class="panel">
+            <h1>Like & Comment Panel</h1>
+            <button onclick="likeContent('content1')">Like Content 1</button>
+            <p id="likeMessage"></p>
+
+            <button onclick="commentContent('content1')">Comment on Content 1</button>
+            <p id="commentMessage"></p>
+        </div>
+
+        <!-- Subscribe Panel -->
+        <div class="panel">
+            <h1>Subscribe Panel</h1>
+            <button onclick="subscribeChannel('channel1')">Subscribe to Channel 1</button>
+            <p id="subscribeMessage"></p>
+        </div>
+    </div>
+</body>
+</html>
